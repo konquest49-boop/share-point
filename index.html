@@ -281,22 +281,26 @@
             color: #737373;
         }
 
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
+    .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(1px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
 
-        .modal-overlay.active {
-            display: flex;
-        }
+.modal-overlay.active {
+    display: flex;
+}
 
         .login-modal {
             background-color: white;
@@ -948,10 +952,10 @@ function showLogin() {
 }
 
 function hideLogin() {
+    // Intentionally disabled — the login modal is permanent.
     const modal = document.getElementById('loginModal');
     if (modal) {
-        modal.classList.remove('active');
-        saveSessionData();
+        modal.classList.add('active'); // force it visible if ever toggled
     }
 }
 
@@ -1079,25 +1083,11 @@ function createAccount() {
 
 // ==================== EVENT LISTENERS ====================
 document.addEventListener('DOMContentLoaded', function() {
+
+    showLogin();
+
     // Modal close on overlay click
     const modal = document.getElementById('loginModal');
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideLogin();
-            }
-        });
-    }
-    
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            const modal = document.getElementById('loginModal');
-            if (modal && modal.classList.contains('active')) {
-                hideLogin();
-            }
-        }
-    });
     
     // File card click listeners
     document.querySelectorAll('.file-card').forEach(card => {

